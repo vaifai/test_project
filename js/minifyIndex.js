@@ -13,7 +13,8 @@ function minifyIndex() {
     var newContents = [];
     var len = data.length;
     var i = 7,
-        prev = 0;
+        prev = 0,
+        minified_counter = 0;
 
     //what this loop does is that it will find all the code between
     //<script></script> tags minify it push it into the array newContents
@@ -23,7 +24,7 @@ function minifyIndex() {
             while (data[endingTag] != '>') {
                 endingTag++;
             }
-            newContents.push(data.substring(prev, endingTag + 1));
+            //newContents.push(data.substring(prev, endingTag + 1));
             var startOfScript = endingTag;
             while (true) {
                 if (data.substring(startOfScript + 1, startOfScript + 10) === '</script>') {
@@ -34,10 +35,28 @@ function minifyIndex() {
             var str = data.substring(endingTag + 1, startOfScript + 1);
 
             var result = Terser.minify(str);
+            if (result.code.length == 0) {
+                newContents.push(data.substring(prev, endingTag + 1));
+                newContents.push(result.code);
+                prev = startOfScript + 1;
+                i = prev;
+            } else {
+                minified_counter++;
+                newContents.push(data.substring(prev, i - 7));
+                var pathToMinifiedFile = "js/minfied_js_" + minified_counter + ".js";
+                fs.writeFileSync("./homepage/" + pathToMinifiedFile,
+                    result.code);
 
-            newContents.push(result.code);
-            prev = startOfScript + 1;
-            i = prev;
+                var newScriptTag = `<script type="text/javascript" src="${pathToMinifiedFile}" ></script>`;
+                newContents.push(newScriptTag);
+                prev = startOfScript + 10;
+                i = prev;
+            }
+
+
+            // newContents.push(result.code);
+            // prev = startOfScript + 1;
+            // i = prev;
         } else {
             i++;
         }
@@ -45,8 +64,10 @@ function minifyIndex() {
     newContents.push(data.substring(prev, i));
     //Pushing the contents in the array into the modifed file
     for (let xx = 0; xx < newContents.length; xx++) {
-        fs.appendFileSync("./newIndex.html", newContents[xx], 'utf-8');
+        fs.appendFileSync("./homepage/newIndex.html", newContents[xx], 'utf-8');
     }
+    fs.unlinkSync("./homepage/index.html");
+    fs.renameSync("./homepage/newIndex.html", "./homepage/index.html");
 
 
 }
