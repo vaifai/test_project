@@ -1,1 +1,1 @@
-snhb.queue.push((function(){snhb.startAuction(["main_leaderboard","wide_skyscraper","bottom_medium_rectangle","right_bottom_medium_rectangle"])}));
+!function(e,t,n,c,o,a,f){e.fbq||(o=e.fbq=function(){o.callMethod?o.callMethod.apply(o,arguments):o.queue.push(arguments)},e._fbq||(e._fbq=o),o.push=o,o.loaded=!0,o.version="2.0",o.queue=[],(a=t.createElement(n)).async=!0,a.src="https://connect.facebook.net/en_US/fbevents.js",(f=t.getElementsByTagName(n)[0]).parentNode.insertBefore(a,f))}(window,document,"script"),fbq("init","308953789889591"),fbq("track","PageView");

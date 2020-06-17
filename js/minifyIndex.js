@@ -9,7 +9,10 @@ function minifyIndex() {
     //newcontents will hold the contents that will be included in the new
     //html file. Why this is done because to include the minified inline
     //JavaScript Code.
-
+    var dir = './homepage/js';
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+    }
     var newContents = [];
     var len = data.length;
     var i = 7,
@@ -32,15 +35,12 @@ function minifyIndex() {
                 }
                 startOfScript++;
             }
+            //console.log(endingTag + " " + startOfScript);
             var str = data.substring(endingTag + 1, startOfScript + 1);
-
+            //console.log('Found');
+            //console.log(str);
             var result = Terser.minify(str);
-            if (result.code.length == 0) {
-                newContents.push(data.substring(prev, endingTag + 1));
-                newContents.push(result.code);
-                prev = startOfScript + 1;
-                i = prev;
-            } else {
+            if (result.code) {
                 minified_counter++;
                 newContents.push(data.substring(prev, i - 7));
                 var pathToMinifiedFile = "js/minfied_js_" + minified_counter + ".js";
@@ -51,8 +51,21 @@ function minifyIndex() {
                 newContents.push(newScriptTag);
                 prev = startOfScript + 10;
                 i = prev;
+                //console.log('EEEEEEE');
+            } else {
+                newContents.push(data.substring(prev, startOfScript + 10));
+                prev = startOfScript + 10;
+                i = prev;
             }
 
+            // var newScriptTag = `<script type="text/javascript" src="${pathToMinifiedFile}" ></script>`;
+            // newContents.push(newScriptTag);
+            // prev = startOfScript + 10;
+            // i = prev;
+            // }
+
+            // prev = startOfScript + 10;
+            // i = prev;
 
             // newContents.push(result.code);
             // prev = startOfScript + 1;

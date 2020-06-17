@@ -15,7 +15,6 @@ function validURL(str) {
     return !!pattern.test(str);
 }
 
-
 const express = require('express');
 const fs = require('fs');
 const {
@@ -36,11 +35,15 @@ app.get('/', (req, res) => {
         checkURL: ''
     });
 });
+app.get('/render_out', (req, res) => {
+    res.send('Files downloaded');
+});
 app.post('/render', (req, res) => {
     url = req.body.url;
     url.trim();
     if (validURL(url)) {
         downloadPage(url); // Function to download the source code of a page
+        res.redirect('/render_out');
 
 
     } else {

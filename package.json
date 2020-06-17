@@ -17,5 +17,8 @@
     "url-exists": "^1.0.3",
     "valid-url": "^1.0.9",
     "website-scraper": "^4.2.1"
+  },
+  "devDependencies": {
+    "clean-css": "^4.2.3"
   }
 }

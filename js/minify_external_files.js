@@ -1,12 +1,18 @@
 const fs = require('fs');
 const Terser = require('terser');
 const path = require('path');
+const cleanCss = require('clean-css');
 const {
     minifyIndex
 } = require('./minifyIndex.js');
 
+const {
+    minifyCss
+} = require('./minify_external_css');
+
 function beginMinification() {
     minifyIndex();
+    minifyCss();
     var options = {
 
         // compress: {
